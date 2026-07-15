@@ -8,7 +8,7 @@ agents** and **operate the `compass` CLI** directly from your editor or terminal
 
 ```bash
 # Add this marketplace (one time)
-/plugin marketplace add useSage/compass-marketplace
+/plugin marketplace add sageai-solutions/compass-marketplace
 
 # Install the Compass plugin
 /plugin install compass@sage

@@ -6,7 +6,7 @@
     "name": "Sage"
   },
   "homepage": "https://sageai.solutions",
-  "repository": "https://github.com/useSage/compass-marketplace",
+  "repository": "https://github.com/sageai-solutions/compass-marketplace",
   "license": "UNLICENSED",
   "keywords": ["compass", "sage", "workflows", "agents", "cli", "ai"]
 }
