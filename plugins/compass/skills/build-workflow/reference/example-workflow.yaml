@@ -1,0 +1,46 @@
+# Minimal known-valid workflow definition: input -> agent -> output.
+# Copy this shape and adapt. `depends_on` is DERIVED from `ref` bindings —
+# never author it. Exactly one `input` component and one `output` component.
+name: Summarizer                     # required top-level name
+type: workflow                       # "workflow" | "agent"
+description: One-shot text summarizer
+version: 1
+nodes:
+  - id: input                        # exactly ONE input component; no depends_on
+    name: Input
+    type: component
+    component_type: input
+    config:
+      type: chat                     # chat -> downstream value is the message string
+                                     # (use type: object + config.schema for typed inputs)
+
+  - id: agent                        # inline agent step (no agent_id)
+    name: Agent
+    type: agent
+    model:
+      connection_id: REPLACE_WITH_PROVIDER_CONNECTION_ID  # <-- USER MUST CUSTOMIZE
+      model: ""                      # "" = the connection's configured model
+    system_prompt: "Summarize the user's message in one sentence."
+    settings:                        # optional; verbatim pydantic-ai ModelSettings
+      temperature: 0.7
+    inputs:
+      input:                         # feed the Input node's output into the agent
+        kind: ref
+        source: input
+        path: "$"
+
+  - id: output                       # exactly ONE output component; must consume a node
+    name: Output
+    type: component
+    component_type: output
+    config:
+      mode: single                   # single -> caller gets the field value unwrapped
+      fields:
+        - name: output
+          type:
+            type: string
+    inputs:
+      output:                        # bind the agent's result as the return value
+        kind: ref
+        source: agent
+        path: "$"

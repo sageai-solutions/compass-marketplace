@@ -1,0 +1,17 @@
+{
+  "name": "sage",
+  "owner": {
+    "name": "Sage",
+    "url": "https://sageai.solutions"
+  },
+  "description": "Claude Code plugins for the Sage Compass AI enablement platform.",
+  "plugins": [
+    {
+      "name": "compass",
+      "source": "./plugins/compass",
+      "description": "Build Compass workflows and agents and operate the compass CLI with Claude.",
+      "category": "workflow",
+      "tags": ["compass", "sage", "workflows", "agents", "cli"]
+    }
+  ]
+}
