@@ -25,10 +25,19 @@ confirm against what is actually installed.
    ```
    compass --version
    ```
-   If the command is not found, the user must install it (the CLI ships from the
-   `compass-core` package's `[cli]` extra). Point them to the Compass developer
-   docs / their platform's **Developer settings** for the install command instead
-   of guessing. Do not proceed until `compass --version` works.
+   If the command is not found, the user installs it from their Compass platform —
+   the wheel is served per-org, gated by their login:
+   - Go to **Settings → Developer → SDK & CLI** (`/settings/sdk`) and click
+     **Download wheel** (the page also shows the exact version-stamped command).
+   - Install the downloaded wheel with its `[cli]` extra:
+     ```
+     uv tool install "./compass_core-<version>-py3-none-any.whl[cli]"
+     ```
+     (`pipx install "./compass_core-<version>-py3-none-any.whl[cli]"` works too.)
+   - Authenticate: `compass auth login --url <your-compass-url>` (or set the env
+     vars below).
+
+   Do not proceed until `compass --version` works.
 
 2. Discover exact flags for any command group before relying on them:
    ```

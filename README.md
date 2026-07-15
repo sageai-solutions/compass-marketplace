@@ -36,9 +36,14 @@ Compass workflow that…" loads `build-workflow` on its own.
 ## Prerequisites
 
 - **Claude Code** with plugin support.
-- The **`compass` CLI** installed and authenticated. The CLI ships from the
-  `compass-core` package's `[cli]` extra. Authenticate with `compass auth login`,
-  or export `COMPASS_API_KEY` and `COMPASS_BASE_URL` (see the `cli` skill).
+- The **`compass` CLI** installed and authenticated. Download the wheel from your
+  Compass platform at **Settings → Developer → SDK & CLI** (`/settings/sdk`), then:
+  ```bash
+  uv tool install "./compass_core-<version>-py3-none-any.whl[cli]"
+  compass auth login --url <your-compass-url>
+  ```
+  Or export `COMPASS_API_KEY` and `COMPASS_BASE_URL` instead of `auth login`
+  (see the `cli` skill).
 
 ## Repository layout
 
