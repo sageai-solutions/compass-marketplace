@@ -72,12 +72,15 @@ you cannot complete it for them). The stored config lives at
 
 ## Always request JSON output
 
-Global flags apply to every command. Add `-o json` so you can parse results
+Add the per-command `--json` flag on read commands so you can parse results
 reliably instead of scraping the table view:
 ```
-compass workflows list -o json
+compass workflows list --json
 ```
-Other global flags: `--profile`, `--base-url`, `--api-key`, `--project`
+The global `-o/--output {table,json,yaml}` flag also exists but must come
+**before** the subcommand (`compass -o yaml workflows list`) — trailing
+`-o json` is a parse error. Prefer `--json`. Other global flags (also
+before the subcommand): `--profile`, `--base-url`, `--api-key`, `--project`
 (per-command project override).
 
 ## Command groups
@@ -88,6 +91,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 |-------|--------------|
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
 | `compass workflows` | `list`, `get`, `create`, `update`, `validate`, `deploy`, `delete` workflow definitions. See the **build-workflow** skill for authoring. |
+| `compass components` | `list`, `get <type>` — the platform's component catalog (config fields + input/output schemas). Read-only; the ground truth for what this deployment supports. |
 | `compass agents` | `list`, `get`, `create`, `update`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
 | `compass executions` | `list`, `get`, `node-executions`, `tree` — inspect past/running executions (the observability surface). |
 | `compass approvals` | `list`, `get`, `approve`, `reject` — human-in-the-loop gates. |
@@ -106,25 +110,25 @@ compass execute -d <deployment-id> -i topic="Q3 report" -f
 
 Run a draft workflow by id:
 ```
-compass execute -w <workflow-id> -i key=value -o json
+compass execute -w <workflow-id> -i key=value --json
 ```
 
 Inspect what happened in an execution:
 ```
-compass executions get <execution-id> -o json
-compass executions tree <execution-id> -o json
+compass executions get <execution-id> --json
+compass executions tree <execution-id> --json
 ```
 
 Handle a pending approval:
 ```
-compass approvals list -o json
+compass approvals list --json
 compass approvals approve <approval-id>
 ```
 
 ## Rules
 
 - Confirm flags with `--help` before running anything you're unsure of.
-- Use `-o json` whenever you need to read a result.
+- Use `--json` whenever you need to read a result (trailing `-o json` does not parse).
 - For inputs, the syntax is `-i key=value`, repeatable, or `-i @file.json` for a
   JSON body — but verify with `compass execute --help`.
 - Destructive commands (`delete`, `reject`) change real state — confirm intent

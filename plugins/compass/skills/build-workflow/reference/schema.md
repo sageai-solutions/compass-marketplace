@@ -1,8 +1,10 @@
 # WorkflowDefinition schema reference
 
-The authoritative shape of a Compass workflow definition (YAML or JSON). Author
-against this exactly. When in doubt, `compass workflows validate <id>` is the
-final word — map its error codes with the table at the bottom.
+The shape of a Compass workflow definition (YAML or JSON). Two live oracles
+outrank this file when they disagree: `compass components list/get <type> --json`
+for the deployed platform's actual component specs, and
+`compass workflows validate <id>` as the final word — map its error codes with
+the table at the bottom.
 
 ## Top-level fields
 
@@ -38,6 +40,9 @@ final word — map its error codes with the table at the bottom.
 | `workflow` | `workflow_id: str?`. Runs another workflow as a sub-step. |
 
 ## The 7 component types (`component_type`)
+
+Snapshot — `compass components list --json` gives the live catalog, and
+`compass components get <type> --json` the full spec per component:
 
 | `component_type` | Purpose | Key `config` |
 |------------------|---------|--------------|
@@ -110,7 +115,7 @@ provider connection that has a model configured. Two gates:
 
 So before authoring, get a real provider connection id:
 ```
-compass providers list -o json      # or: compass connections list -o json
+compass providers list --json      # or: compass connections list --json
 ```
 Put it in `model.connection_id`. Leave `model.model` empty to use the connection's
 own configured model, or set it to pin a specific model. A node that uses

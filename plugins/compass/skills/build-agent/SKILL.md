@@ -22,7 +22,7 @@ If `compass --version` fails, stop — the CLI isn't installed (see the `cli` sk
 
 The agent's model comes from a **provider connection**, not a bare model name. Find one:
 ```
-compass providers list -o json      # or: compass connections list -o json
+compass providers list --json      # or: compass connections list --json
 ```
 Note an active connection's `id`. If there are none, tell the user to create a
 provider connection first — you can't invent a model. Without a working model the
@@ -37,7 +37,7 @@ compass agents create \
   --name "Support Triage" \
   --provider <provider-connection-id> \
   --instructions "You triage support tickets. Classify severity and suggest an owner." \
-  -o json
+  --json
 ```
 
 | Flag | Meaning |
@@ -62,7 +62,7 @@ For custom `settings` (temperature, max_tokens), a `response_format` (structured
 output), tools that require approval, or batching, author the agent **definition YAML**
 and pass it with `-f`:
 ```
-compass agents create -f agent.yaml -o json
+compass agents create -f agent.yaml --json
 ```
 Use `type: agent` and the agent-node schema from the build-workflow reference:
 [../build-workflow/reference/schema.md](../build-workflow/reference/schema.md).
@@ -77,7 +77,7 @@ compass agents execute <agent-id> -m "Ticket: login page 500s for all users" -f
 ```
 Then deploy (deploy works on an agent's id):
 ```
-compass workflows deploy <agent-id> -o json
+compass workflows deploy <agent-id> --json
 ```
 
 ## Rules

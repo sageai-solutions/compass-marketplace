@@ -1,7 +1,7 @@
 {
   "name": "compass",
   "description": "Build Compass workflows and agents and operate the compass CLI with Claude. Provides skills for authoring workflow/agent definitions, validating and deploying them, and running executions.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Sage"
   },

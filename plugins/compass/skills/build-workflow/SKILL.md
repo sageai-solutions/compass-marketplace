@@ -23,12 +23,27 @@ authoring.** A copy-ready starting point is
 
 If `compass --version` fails, stop — the CLI isn't installed (see the `cli` skill).
 
+## Step 0 — Pull the live component catalog
+
+The platform you're talking to is the authority on which components exist and
+what they accept — deployments differ in version, so **prefer the live catalog
+over the reference file** whenever the CLI supports it:
+```
+compass components list --json            # every component type + summary
+compass components get <type> --json      # one component's full spec:
+                                          # config fields + input/output JSON Schemas
+```
+Use the reference file for concepts, wiring rules, and error codes; use the live
+specs for the exact config fields and schemas of the components you're about to
+place. If `compass components` doesn't exist (older CLI), fall back to
+[reference/schema.md](reference/schema.md) entirely.
+
 ## Step 1 — Get a model connection (do this first)
 
 Every agent node needs a provider connection that has a model configured, or deploy
 fails with `MISSING_CONNECTION` / `MISSING_MODEL`. Find one up front:
 ```
-compass providers list -o json      # or: compass connections list -o json
+compass providers list --json      # or: compass connections list --json
 ```
 Pick an active connection's `id`. If there are none, tell the user to create a
 provider connection first (in the platform UI, or `compass providers create -f …`);
@@ -51,7 +66,7 @@ Sketch the graph for the user in plain terms before writing YAML, then write it.
 
 **Editing an existing workflow** — `update -f` takes the raw definition text:
 ```
-compass workflows update <workflow-id> -f definition.yaml -o json
+compass workflows update <workflow-id> -f definition.yaml --json
 ```
 
 **Creating a new workflow** — `create -f` expects a full **Workflow envelope** (JSON
@@ -59,7 +74,7 @@ with the definition embedded as a string), not the bare definition. Wrap it with
 ```
 jq -Rs '{clerk_org_id:"placeholder",project_id:"00000000-0000-0000-0000-000000000000",name:"Summarizer",description:"",type:"workflow",definition:.}' \
   definition.yaml > envelope.json
-compass workflows create -f envelope.json -o json
+compass workflows create -f envelope.json --json
 ```
 `clerk_org_id`/`project_id` are placeholders — the server overrides them from your
 auth scope; they only need to be present to pass client-side validation. Capture the
@@ -69,7 +84,7 @@ and adjust — or GET an existing workflow's JSON, swap `name` + `definition`, a
 ## Step 4 — Validate and fix
 
 ```
-compass workflows validate <workflow-id> -o json
+compass workflows validate <workflow-id> --json
 ```
 Map any error codes using the table in [reference/schema.md](reference/schema.md)
 (e.g. `MISSING_MODEL` → the connection has no model; `DUPLICATE_INPUT` → more than one
@@ -79,7 +94,7 @@ clean.
 ## Step 5 — Deploy and run
 
 ```
-compass workflows deploy <workflow-id> -o json
+compass workflows deploy <workflow-id> --json
 compass execute -d <deployment-id> -i topic="Q3 report" -f    # run the deployment
 ```
 To test before deploying, execute the draft directly:
