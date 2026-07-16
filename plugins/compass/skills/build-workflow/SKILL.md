@@ -23,19 +23,23 @@ authoring.** A copy-ready starting point is
 
 If `compass --version` fails, stop — the CLI isn't installed (see the `cli` skill).
 
-## Step 0 — Pull the live component catalog
+## Step 0 — Pull the live node palette
 
-The platform you're talking to is the authority on which components exist and
-what they accept — deployments differ in version, so **prefer the live catalog
-over the reference file** whenever the CLI supports it:
+The platform you're talking to is the authority on what can be placed in a
+workflow — deployments differ in version, so **prefer the live catalog over the
+reference file** whenever the CLI supports it:
 ```
-compass components list --json            # every component type + summary
+compass nodes list --json                 # the FULL palette in one call, each row
+                                          # tagged node_type: component | agent |
+                                          # integration (incl. this project's
+                                          # custom connectors + the agent's slots)
 compass components get <type> --json      # one component's full spec:
                                           # config fields + input/output JSON Schemas
 ```
 Use the reference file for concepts, wiring rules, and error codes; use the live
-specs for the exact config fields and schemas of the components you're about to
-place. If `compass components` doesn't exist (older CLI), fall back to
+specs for the exact config fields and schemas of the nodes you're about to
+place. Fallbacks on older CLIs: `compass components list --json` (components
+only — the agent and integrations won't be listed), then
 [reference/schema.md](reference/schema.md) entirely.
 
 ## Step 1 — Get a model connection (do this first)

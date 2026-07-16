@@ -1,10 +1,10 @@
 # WorkflowDefinition schema reference
 
 The shape of a Compass workflow definition (YAML or JSON). Two live oracles
-outrank this file when they disagree: `compass components list/get <type> --json`
-for the deployed platform's actual component specs, and
-`compass workflows validate <id>` as the final word — map its error codes with
-the table at the bottom.
+outrank this file when they disagree: `compass nodes list --json` (the full
+palette: components + agent + integrations; `compass components get <type>
+--json` for one component's depth), and `compass workflows validate <id>` as
+the final word — map its error codes with the table at the bottom.
 
 ## Top-level fields
 

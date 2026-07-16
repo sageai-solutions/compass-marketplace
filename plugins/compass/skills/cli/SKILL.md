@@ -91,7 +91,8 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 |-------|--------------|
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
 | `compass workflows` | `list`, `get`, `create`, `update`, `validate`, `deploy`, `delete` workflow definitions. See the **build-workflow** skill for authoring. |
-| `compass components` | `list`, `get <type>` — the platform's component catalog (config fields + input/output schemas). Read-only; the ground truth for what this deployment supports. |
+| `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the project's integrations, each row tagged `node_type`. The ground truth for what this deployment supports. |
+| `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + input/output schemas). Read-only. |
 | `compass agents` | `list`, `get`, `create`, `update`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
 | `compass executions` | `list`, `get`, `node-executions`, `tree` — inspect past/running executions (the observability surface). |
 | `compass approvals` | `list`, `get`, `approve`, `reject` — human-in-the-loop gates. |
