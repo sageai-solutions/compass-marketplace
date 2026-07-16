@@ -49,10 +49,9 @@ Snapshot — `compass components list --json` gives the live catalog, and
 | `input` | Entry point (exactly one). | `type: chat` (default) \| `object`. `object` needs `config.schema` (see below). |
 | `output` | Exit point (exactly one). | `mode: single` (default, value unwrapped) \| `structured` (object of all fields); `fields: [{name, type: {type, json_schema?}}]`. |
 | `prompt` | Renders a template string. | `template` (**required**); bare `{{name}}` tokens auto-declare mapper-bound inputs. |
-| `text_splitter` | Split text into chunks. | `chunk_size`=1000, `overlap`=200, `split_on_headings`=true. |
 | `document_splitter` | Split a document by pages (tool-capable). | `pages_per_chunk`=1. Input requires `document`. |
 | `document_parser` | Parse/OCR a document (tool-capable). | `always_ocr`=false, `allow_unreadable_pages`=false, `batch_concurrency`=5. Input requires `document`. |
-| `embeddings` | Embed text. | `text_field`="text", `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
+| `embeddings` | Embed text. A bare-string input is chunked first; output is always a list. | `text_field`="text", `chunk_size`=1000, `chunk_overlap`=200, `split_on_headings`=true, `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
 
 ### Input node `config.type: object`
 ```yaml
