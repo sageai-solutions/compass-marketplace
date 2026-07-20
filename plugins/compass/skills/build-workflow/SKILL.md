@@ -76,11 +76,11 @@ compass workflows update <workflow-id> -f definition.yaml --json
 **Creating a new workflow** — `create -f` expects a full **Workflow envelope** (JSON
 with the definition embedded as a string), not the bare definition. Wrap it with jq:
 ```
-jq -Rs '{clerk_org_id:"placeholder",project_id:"00000000-0000-0000-0000-000000000000",name:"Summarizer",description:"",type:"workflow",definition:.}' \
+jq -Rs '{org_id:"placeholder",project_id:"00000000-0000-0000-0000-000000000000",name:"Summarizer",description:"",type:"workflow",definition:.}' \
   definition.yaml > envelope.json
 compass workflows create -f envelope.json --json
 ```
-`clerk_org_id`/`project_id` are placeholders — the server overrides them from your
+`org_id`/`project_id` are placeholders — the server overrides them from your
 auth scope; they only need to be present to pass client-side validation. Capture the
 returned `id`. (If `create` rejects the envelope, run `compass workflows create --help`
 and adjust — or GET an existing workflow's JSON, swap `name` + `definition`, and re-POST.)
