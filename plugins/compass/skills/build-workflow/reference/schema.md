@@ -39,19 +39,26 @@ the final word — map its error codes with the table at the bottom.
 | `integration` | `integration_type: str`, `connection_id: str?`, `action: str`. Calls an external OpenAPI connector. |
 | `workflow` | `workflow_id: str?`. Runs another workflow as a sub-step. |
 
-## The 7 component types (`component_type`)
+## The component types (`component_type`)
 
 Snapshot — `compass components list --json` gives the live catalog, and
-`compass components get <type> --json` the full spec per component:
+`compass components get <type> --json` the full spec per component.
 
-| `component_type` | Purpose | Key `config` |
-|------------------|---------|--------------|
-| `input` | Entry point (exactly one). | `type: chat` (default) \| `object`. `object` needs `config.schema` (see below). |
-| `output` | Exit point (exactly one). | `mode: single` (default, value unwrapped) \| `structured` (object of all fields); `fields: [{name, type: {type, json_schema?}}]`. |
-| `prompt` | Renders a template string. | `template` (**required**); bare `{{name}}` tokens auto-declare mapper-bound inputs. |
-| `document_splitter` | Split a document by pages (tool-capable). | `pages_per_chunk`=1. Input requires `document`. |
-| `document_parser` | Parse/OCR a document (tool-capable). | `always_ocr`=false, `allow_unreadable_pages`=false, `batch_concurrency`=5. Input requires `document`. |
-| `embeddings` | Embed text. A bare-string input is chunked first; output is always a list. | `text_field`="text", `chunk_size`=1000, `chunk_overlap`=200, `split_on_headings`=true, `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
+Components carry **capabilities**, exactly like integrations: each is a named action with
+its own input and output schema. A component node names the one it runs as `action`, which
+may be left out when the component has only one. `input` and `output` are the workflow's
+entry and exit and have none. Attached to an agent as a tool, a component exposes one tool
+per capability, narrowed with `enabled_capabilities` / `approval_capabilities` as an
+integration tool is.
+
+| `component_type` | Capabilities | Purpose | Key `config` |
+|------------------|--------------|---------|--------------|
+| `input` | — | Entry point (exactly one). | `type: chat` (default) \| `object`. `object` needs `config.schema` (see below). |
+| `output` | — | Exit point (exactly one). | `mode: single` (default, value unwrapped) \| `structured` (object of all fields); `fields: [{name, type: {type, json_schema?}}]`. |
+| `prompt` | `render` | Renders a template string. | `template` (**required**); bare `{{name}}` tokens auto-declare mapper-bound inputs. |
+| `document_splitter` | `split` | Split a document by pages (tool-capable). | `pages_per_chunk`=1. Input requires `document`. |
+| `document_parser` | `parse` | Parse/OCR a document (tool-capable). | `always_ocr`=false, `allow_unreadable_pages`=false, `batch_concurrency`=5. Input requires `document`. |
+| `embeddings` | `embed` | Embed text. A bare-string input is chunked first; output is always a list. | `text_field`="text", `chunk_size`=1000, `chunk_overlap`=200, `split_on_headings`=true, `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
 
 ### Input node `config.type: object`
 ```yaml
