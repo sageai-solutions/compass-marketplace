@@ -92,12 +92,13 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
 | `compass workflows` | `list`, `get`, `create`, `update`, `validate`, `deploy`, `delete` workflow definitions. See the **build-workflow** skill for authoring. |
 | `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the project's integrations, each row tagged `node_type`. The ground truth for what this deployment supports. |
-| `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + input/output schemas). Read-only. |
+| `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + each capability's input/output schemas). Read-only. |
 | `compass agents` | `list`, `get`, `create`, `update`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
 | `compass executions` | `list`, `get`, `node-executions`, `tree` — inspect past/running executions (the observability surface). |
 | `compass approvals` | `list`, `get`, `approve`, `reject` — human-in-the-loop gates. |
 | `compass connections` / `providers` / `gateways` | CRUD for connections (model/provider/tool credentials). `connections` also has `health`. |
 | `compass integrations` | Custom OpenAPI connectors: `list`, `get`, `register`, `delete`. |
+| `compass datasets` | Searchable document collections: `list`, `show`, `create`, `upload` (one ingestion execution per file; `--wait` follows them), `documents`, `search`, `delete-document`, `delete`. |
 | `compass projects` | `list`, `use <project-id>` — switch the active project. |
 | `compass conversations` | `list`, `get`, `create`, `runs`, `delete`. |
 | `compass auth` / `compass config` | `login`/`logout`/`whoami`; `list`/`path`/`use <profile>`. |
@@ -118,6 +119,13 @@ Inspect what happened in an execution:
 ```
 compass executions get <execution-id> --json
 compass executions tree <execution-id> --json
+```
+
+Make a dataset, add documents, and check it finds what it should:
+```
+compass datasets create --name Handbook --embedding-connection <provider-connection-id> --json
+compass datasets upload <dataset-id> handbook.pdf policies.docx --wait
+compass datasets search <dataset-id> "how much leave do I get?" --json
 ```
 
 Handle a pending approval:
