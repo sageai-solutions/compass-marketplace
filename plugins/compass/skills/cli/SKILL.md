@@ -98,7 +98,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | `compass approvals` | `list`, `get`, `approve`, `reject` — human-in-the-loop gates. |
 | `compass connections` / `providers` / `gateways` | CRUD for connections (model/provider/tool credentials). `connections` also has `health`. |
 | `compass integrations` | Custom OpenAPI connectors: `list`, `get`, `register`, `delete`. |
-| `compass datasets` | Searchable document collections: `list`, `show`, `create`, `upload` (one ingestion execution per file; `--wait` follows them), `documents`, `search`, `delete-document`, `delete`. |
+| `compass datasets` | Searchable document collections: `list`, `show`, `create` (`--ocr-connection`, `--chunk-size`, `--chunk-overlap` set its pipeline's settings), `upload` (one ingestion execution per file; `--wait` follows them), `documents`, `search`, `delete-document`, `delete`, and storage sources it keeps in sync with: `sources`, `add-source` (`--connection`, `--path`, `--schedule` cron), `sync`, `runs`. |
 | `compass projects` | `list`, `use <project-id>` — switch the active project. |
 | `compass conversations` | `list`, `get`, `create`, `runs`, `delete`. |
 | `compass auth` / `compass config` | `login`/`logout`/`whoami`; `list`/`path`/`use <profile>`. |
@@ -126,6 +126,7 @@ Make a dataset, add documents, and check it finds what it should:
 compass datasets create --name Handbook --embedding-connection <provider-connection-id> --json
 compass datasets upload <dataset-id> handbook.pdf policies.docx --wait
 compass datasets search <dataset-id> "how much leave do I get?" --json
+compass datasets add-source <dataset-id> --connection <s3-connection-id> --path handbooks/ --schedule "0 2 * * *"
 ```
 
 Handle a pending approval:
