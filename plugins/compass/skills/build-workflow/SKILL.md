@@ -29,10 +29,11 @@ The platform you're talking to is the authority on what can be placed in a
 workflow — deployments differ in version, so **prefer the live catalog over the
 reference file** whenever the CLI supports it:
 ```
-compass nodes list --json                 # the FULL palette in one call, each row
-                                          # tagged node_type: component | agent |
+compass nodes list --json                 # the FULL palette in one call; each row
+                                          # carries its kind: component | agent |
                                           # integration (incl. this project's
                                           # custom connectors + the agent's slots)
+                                          # and its category (palette shelf)
 compass components get <type> --json      # one component's full spec:
                                           # config fields + input/output JSON Schemas
 ```
