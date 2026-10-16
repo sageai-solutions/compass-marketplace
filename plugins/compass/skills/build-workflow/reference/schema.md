@@ -35,7 +35,7 @@ the final word — map its error codes with the table at the bottom.
 | `type` | Extra fields |
 |--------|--------------|
 | `component` | `component_type: str`, `config: dict`. The building blocks (input/output/prompt/…). |
-| `agent` | `agent_id` (reference a prebuilt agent — then inline fields are ignored) **or** inline: `model`, `system_prompt`, `tools`, `settings`, `reasoning`, `conversation_history`, `response_format`, `batch_over`, `batch_concurrency`, `tools_require_approval`. See **Agent node** below. |
+| `agent` | `agent_id` (reference a prebuilt agent — then inline fields are ignored) **or** inline: `model`, `system_prompt`, `tools`, `settings`, `reasoning`, `conversation_history`, `response_format`, `batch_over`, `batch_concurrency`. See **Agent node** below. |
 | `integration` | `integration_type: str`, `connection_id: str?`, `action: str`. Calls an external OpenAPI connector. |
 | `workflow` | `workflow_id: str?`. Runs another workflow as a sub-step. |
 
@@ -103,7 +103,6 @@ all fields. Output must depend on ≥1 node.
   response_format: null        # optional JSON Schema constraining the agent's output
   batch_over: ""               # "" off | "$" input is the list | "<field>" that field is the list
   batch_concurrency: 5
-  tools_require_approval: false
   tools: []                    # list of ToolSpec (agent:/workflow:/integration: sources)
   inputs:
     input: { kind: ref, source: <upstream-id>, path: "$" }
