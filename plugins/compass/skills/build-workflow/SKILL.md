@@ -59,7 +59,7 @@ you can't invent a model.
 Write `definition.yaml` following [reference/schema.md](reference/schema.md). The
 non-negotiables:
 
-- Exactly **one** `input` component and **one** `output` component.
+- Exactly **one** `input` node and **one** `output` node.
 - **Never** author `depends_on` — it's derived from your `ref`/`template`/`list`/
   `object` bindings.
 - Wire nodes with `ref` bindings: `{ kind: ref, source: <upstream-id>, path: "$" }`.
@@ -93,7 +93,7 @@ compass workflows validate <workflow-id> --json
 ```
 Map any error codes using the table in [reference/schema.md](reference/schema.md)
 (e.g. `MISSING_MODEL` → the connection has no model; `DUPLICATE_INPUT` → more than one
-input component). Edit `definition.yaml`, re-run `update -f`, re-validate. Loop until
+input node). Edit `definition.yaml`, re-run `update -f`, re-validate. Loop until
 clean.
 
 ## Step 5 — Deploy and run

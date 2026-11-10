@@ -13,7 +13,6 @@ the final word — map its error codes with the table at the bottom.
 | `name` | str | **required** | Missing → parser error. |
 | `type` | str | `"workflow"` | `"workflow"` \| `"agent"`. |
 | `description` | str | `""` | |
-| `input_schema` | dict | `{}` | Usually derived from the Input node; leave empty. |
 | `version` | int | `1` | |
 | `nodes` | list | `[]` | The graph. Each node needs at least `id` and `type`. |
 
@@ -22,7 +21,7 @@ the final word — map its error codes with the table at the bottom.
 | Field | Type | Notes |
 |-------|------|-------|
 | `id` | str | **required**, unique. |
-| `type` | str | **required**. One of the 4 node types below. |
+| `type` | str | **required**. One of the 6 node types below. |
 | `name` | str | Display label. |
 | `inputs` | dict[str, Binding] | Param name → binding. An unbound param is simply **omitted**. |
 | `config` | dict | Component/agent config (see below). |
@@ -30,11 +29,13 @@ the final word — map its error codes with the table at the bottom.
 | `position` / `meta` | — | Canvas-only; ignored by execution, safe to omit. |
 | `depends_on` | list | **DERIVED from `ref`/`template`/`list`/`object` bindings. NEVER author it.** |
 
-## The 4 node types
+## The 6 node types
 
 | `type` | Extra fields |
 |--------|--------------|
-| `component` | `component_type: str`, `config: dict`. The building blocks (input/output/prompt/…). |
+| `input` | `mode`, `fields`. The entry point — exactly one. See **Input node** below. |
+| `output` | `mode`, `fields`. The exit point — exactly one. See **Output node** below. |
+| `component` | `component_type: str`, `config: dict`. The building blocks (prompt/document_parser/…). |
 | `agent` | `agent_id` (reference a prebuilt agent — then inline fields are ignored) **or** inline: `model`, `system_prompt`, `tools`, `settings`, `reasoning`, `conversation_history`, `response_format`, `batch_over`, `batch_concurrency`. See **Agent node** below. |
 | `integration` | `integration_type: str`, `connection_id: str?`, `action: str`. Calls an external OpenAPI connector. |
 | `workflow` | `workflow_id: str?`. Runs another workflow as a sub-step. |
@@ -46,36 +47,46 @@ Snapshot — `compass components list --json` gives the live catalog, and
 
 Components carry **capabilities**, exactly like integrations: each is a named action with
 its own input and output schema. A component node names the one it runs as `action`, which
-may be left out when the component has only one. `input` and `output` are the workflow's
-entry and exit and have none. Attached to an agent as a tool, a component exposes one tool
+may be left out when the component has only one. Attached to an agent as a tool, a component exposes one tool
 per capability, narrowed with `enabled_capabilities` / `approval_capabilities` as an
 integration tool is.
 
 | `component_type` | Capabilities | Purpose | Key `config` |
 |------------------|--------------|---------|--------------|
-| `input` | — | Entry point (exactly one). | `type: chat` (default) \| `object`. `object` needs `config.schema` (see below). |
-| `output` | — | Exit point (exactly one). | `mode: single` (default, value unwrapped) \| `structured` (object of all fields); `fields: [{name, type: {type, json_schema?}}]`. |
 | `prompt` | `render` | Renders a template string. | `template` (**required**); bare `{{name}}` tokens auto-declare mapper-bound inputs. |
 | `document_splitter` | `split` | Split a document by pages (tool-capable). | `pages_per_chunk`=1. Input requires `document`. |
 | `document_parser` | `parse` | Parse/OCR a document (tool-capable). | `always_ocr`=false, `allow_unreadable_pages`=false, `batch_concurrency`=5. Input requires `document`. |
 | `embeddings` | `embed` | Embed text. A bare-string input is chunked first; output is always a list. | `text_field`="text", `chunk_size`=1000, `chunk_overlap`=200, `split_on_headings`=true, `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
 
-### Input node `config.type: object`
+### Input node
+`mode: chat` (the default) takes a message and its attachments, and hands the message
+string downstream. `mode: object` takes the declared `fields`:
 ```yaml
-config:
-  type: object
-  schema:
+- id: input
+  type: input
+  mode: object
+  fields:
     topic:   { type: string,  description: "...", required: true }
     count:   { type: integer, required: false }
     doc:     { type: file }        # file -> attachment descriptor
 ```
-Field `type` ∈ `string | integer | number | boolean | object | array | file`.
-Input node has **no** `inputs` and **no** `depends_on`.
+Field `type` ∈ `string | integer | number | boolean | object | array | file`; an `object`
+nests `properties`, an `array` declares `items`. Input node has **no** `inputs` and **no**
+`depends_on`.
 
 ### Output node
-Each entry in `config.fields` becomes a bindable param in `inputs`. `mode: single`
-returns the one field's value unwrapped; `mode: structured` returns an object of
-all fields. Output must depend on ≥1 node.
+```yaml
+- id: output
+  type: output
+  mode: single                     # or structured
+  fields:
+    - { name: result, type: { type: object } }
+  inputs:
+    result: { kind: ref, source: agent, path: "$" }
+```
+Each entry in `fields` (`{name, type: {type, json_schema?}}`) becomes a bindable param in
+`inputs`. `mode: single` (the default) returns the one field's value unwrapped;
+`mode: structured` returns an object of all fields. Output must depend on ≥1 node.
 
 ## The 6 binding kinds (values of `inputs[param]`)
 
