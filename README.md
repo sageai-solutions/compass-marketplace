@@ -26,7 +26,7 @@ The `compass` plugin bundles three skills:
 
 | Skill | Invoke | What it does |
 |-------|--------|--------------|
-| `cli` | `/compass:cli` | Operate the platform with the `compass` CLI — run/follow executions, inspect workflows, executions, approvals, connections, projects. |
+| `cli` | `/compass:cli` | Operate the platform with the `compass` CLI — run/follow executions, inspect workflows, executions, approvals, connections, owners. |
 | `build-workflow` | `/compass:build-workflow` | Author a multi-node workflow definition against the Compass schema, then validate and deploy it. |
 | `build-agent` | `/compass:build-agent` | Author an agent (instructions, model, tools) and deploy it. |
 

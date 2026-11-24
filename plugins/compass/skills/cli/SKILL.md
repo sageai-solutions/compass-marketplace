@@ -3,10 +3,10 @@ name: cli
 description: >-
   Operate the Compass platform from the command line with the `compass` CLI:
   run and follow executions, list/inspect workflows, agents, executions,
-  connections, providers, projects, conversations, and approvals. Use when the
+  connections, providers, owners, conversations, and approvals. Use when the
   user wants to run/execute a Compass workflow or agent, deploy or check
   something on Compass, tail an execution, list or inspect any Compass resource,
-  approve/reject a human-in-the-loop request, or switch project/profile.
+  approve/reject a human-in-the-loop request, or switch owner/profile.
 allowed-tools: "Bash(compass:*)"
 ---
 
@@ -56,7 +56,7 @@ use, environment variables are the cleanest path and fully bypass `compass auth 
 |----------|---------|
 | `COMPASS_API_KEY` | Org-scoped API key (`ak_…`). Required. |
 | `COMPASS_BASE_URL` | Platform base URL. Required. |
-| `COMPASS_PROJECT_ID` | Active project (sent as `X-Compass-Project-Id`). Optional. |
+| `COMPASS_OWNER_ID` | Who new things are created for: a team you are in, or the organization (sent as `X-Compass-Owner-Id`). Optional; without it they are your key's own. Lists and reads span every owner you can reach either way. |
 | `COMPASS_PROFILE` | Named profile to use from the config file. Optional. |
 
 Check whether the user is authenticated before running real commands:
@@ -80,8 +80,8 @@ compass workflows list --json
 The global `-o/--output {table,json,yaml}` flag also exists but must come
 **before** the subcommand (`compass -o yaml workflows list`) — trailing
 `-o json` is a parse error. Prefer `--json`. Other global flags (also
-before the subcommand): `--profile`, `--base-url`, `--api-key`, `--project`
-(per-command project override).
+before the subcommand): `--profile`, `--base-url`, `--api-key`, `--owner`
+(who this one command creates things for).
 
 ## Command groups
 
@@ -91,7 +91,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 |-------|--------------|
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
 | `compass workflows` | `list`, `get`, `create`, `update`, `validate`, `deploy`, `delete` workflow definitions. See the **build-workflow** skill for authoring. |
-| `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the project's integrations, each row carrying its `kind` (`component` / `agent` / `integration`) and `category`. The ground truth for what this deployment supports. |
+| `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the integrations you can reach, each row carrying its `kind` (`component` / `agent` / `integration`) and `category`. The ground truth for what this deployment supports. |
 | `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + each capability's input/output schemas). Read-only. |
 | `compass agents` | `list`, `get`, `create`, `update`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
 | `compass executions` | `list`, `get`, `node-executions`, `tree` — inspect past/running executions (the observability surface). |
@@ -99,7 +99,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | `compass connections` / `providers` / `gateways` | CRUD for connections (model/provider/tool credentials). `connections` also has `health`. |
 | `compass integrations` | Custom OpenAPI connectors: `list`, `get`, `register`, `delete`. |
 | `compass datasets` | Searchable document collections: `list`, `show`, `create` (`--ocr-connection`, `--chunk-size`, `--chunk-overlap` set its pipeline's settings), `upload` (one ingestion execution per file; `--wait` follows them), `documents`, `search`, `delete-document`, `delete`, and storage sources it keeps in sync with: `sources`, `add-source` (`--connection`, `--path`, `--schedule` cron), `sync`, `runs`. |
-| `compass projects` | `list`, `use <project-id>` — switch the active project. |
+| `compass owners` | `list`, `use <owner-id>` — who you can create things for (you, your teams, the organization) with your role in each, and which one new things land with. |
 | `compass conversations` | `list`, `get`, `create`, `runs`, `delete`. |
 | `compass auth` / `compass config` | `login`/`logout`/`whoami`; `list`/`path`/`use <profile>`. |
 

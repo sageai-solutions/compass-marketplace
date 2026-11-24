@@ -31,8 +31,8 @@ reference file** whenever the CLI supports it:
 ```
 compass nodes list --json                 # the FULL palette in one call; each row
                                           # carries its kind: component | agent |
-                                          # integration (incl. this project's
-                                          # custom connectors + the agent's slots)
+                                          # integration (incl. the custom
+                                          # connectors you can reach + the agent's slots)
                                           # and its category (palette shelf)
 compass components get <type> --json      # one component's full spec:
                                           # config fields + input/output JSON Schemas
@@ -74,17 +74,14 @@ Sketch the graph for the user in plain terms before writing YAML, then write it.
 compass workflows update <workflow-id> -f definition.yaml --json
 ```
 
-**Creating a new workflow** — `create -f` expects a full **Workflow envelope** (JSON
-with the definition embedded as a string), not the bare definition. Wrap it with jq:
+**Creating a new workflow** — `create -f` takes the definition itself, which names the
+workflow:
 ```
-jq -Rs '{org_id:"placeholder",project_id:"00000000-0000-0000-0000-000000000000",name:"Summarizer",description:"",type:"workflow",definition:.}' \
-  definition.yaml > envelope.json
-compass workflows create -f envelope.json --json
+compass workflows create -f definition.yaml --json
 ```
-`org_id`/`project_id` are placeholders — the server overrides them from your
-auth scope; they only need to be present to pass client-side validation. Capture the
-returned `id`. (If `create` rejects the envelope, run `compass workflows create --help`
-and adjust — or GET an existing workflow's JSON, swap `name` + `definition`, and re-POST.)
+Capture the returned `id`. The workflow belongs to your key's own owner. To create it for
+a team you are in, or for the organization, name that owner: `compass --owner <owner-id>
+workflows create -f definition.yaml --json` (`compass owners list` shows the ids).
 
 ## Step 4 — Validate and fix
 
