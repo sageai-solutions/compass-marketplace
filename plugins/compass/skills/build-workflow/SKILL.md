@@ -108,9 +108,12 @@ Publish turns your draft into the next version. Deploy makes the latest version 
 draft is never deployed.
 ```
 compass workflows publish <workflow-id> -m "What the change is for" --json
-compass workflows deploy <workflow-id> --json
+compass workflows deploy <workflow-id> --json                  # prints the deployment, with its id
 compass execute -d <deployment-id> -i topic="Q3 report" -f    # run the deployment
 ```
+A deploy is for one owner: the workflow's own unless `--for <owner-id>` names another
+(`compass owners list`). Deploying for a team or the organization takes its admin.
+`compass workflows deployments <workflow-id>` lists who runs it live.
 Publishing is refused when someone published a newer version after your draft started.
 Read the latest (`compass workflows get <workflow-id> --json`), reapply your change to its
 definition, `update -f`, and publish again. `compass workflows versions <workflow-id>`

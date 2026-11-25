@@ -90,7 +90,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | Group | What it does |
 |-------|--------------|
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
-| `compass workflows` | `list`, `get`, `create`, `update` (writes your own draft), `draft`, `discard`, `validate`, `publish` (your draft becomes the next version), `versions`, `deploy` (the latest version goes live), `delete`. See the **build-workflow** skill for authoring. |
+| `compass workflows` | `list`, `get`, `create`, `update` (writes your own draft), `draft`, `discard`, `validate`, `publish` (your draft becomes the next version), `versions`, `deploy` (the latest version goes live; `--for <owner-id>` deploys it for a team or the organization, which takes its admin), `deployments` (who runs it live, with each deployment's id and version), `delete`. See the **build-workflow** skill for authoring. |
 | `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the integrations you can reach, each row carrying its `kind` (`component` / `agent` / `integration`) and `category`. The ground truth for what this deployment supports. |
 | `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + each capability's input/output schemas). Read-only. |
 | `compass agents` | `list`, `get`, `create`, `update` (writes your own draft), `publish`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
@@ -105,8 +105,10 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 
 ## Common recipes
 
-Run a deployed workflow and follow it live:
+Run a deployed workflow and follow it live. A workflow is deployed once for each
+owner that runs it, so list its deployments to find the id:
 ```
+compass workflows deployments <workflow-id> --json
 compass execute -d <deployment-id> -i topic="Q3 report" -f
 ```
 
