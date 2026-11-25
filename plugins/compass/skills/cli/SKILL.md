@@ -90,10 +90,10 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | Group | What it does |
 |-------|--------------|
 | `compass execute` | Dispatch an execution of a deployment (`-d`) or workflow (`-w`) with inputs (`-i`), optionally following live output (`-f`). The main "run something" command. |
-| `compass workflows` | `list`, `get`, `create`, `update`, `validate`, `deploy`, `delete` workflow definitions. See the **build-workflow** skill for authoring. |
+| `compass workflows` | `list`, `get`, `create`, `update` (writes your own draft), `draft`, `discard`, `validate`, `publish` (your draft becomes the next version), `versions`, `deploy` (the latest version goes live), `delete`. See the **build-workflow** skill for authoring. |
 | `compass nodes` | `list` — the FULL placeable palette in one call: components + the agent kind + the integrations you can reach, each row carrying its `kind` (`component` / `agent` / `integration`) and `category`. The ground truth for what this deployment supports. |
 | `compass components` | `list`, `get <type>` — the component catalog in depth (config fields + each capability's input/output schemas). Read-only. |
-| `compass agents` | `list`, `get`, `create`, `update`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
+| `compass agents` | `list`, `get`, `create`, `update` (writes your own draft), `publish`, `execute`, `delete` agents. See the **build-agent** skill for authoring. |
 | `compass executions` | `list`, `get`, `node-executions`, `tree` — inspect past/running executions (the observability surface). |
 | `compass approvals` | `list`, `get`, `approve`, `reject` — human-in-the-loop gates. |
 | `compass connections` / `providers` / `gateways` | CRUD for connections (model/provider/tool credentials). `connections` also has `health`. |
@@ -110,7 +110,8 @@ Run a deployed workflow and follow it live:
 compass execute -d <deployment-id> -i topic="Q3 report" -f
 ```
 
-Run a draft workflow by id:
+Run a workflow by id, as you are working on it: your draft of it, or its latest version when
+you hold no draft:
 ```
 compass execute -w <workflow-id> -i key=value --json
 ```

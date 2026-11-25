@@ -69,14 +69,19 @@ Use `type: agent` and the agent-node schema from the build-workflow reference:
 Agent shape is strict: exactly one inline agent node (no `agent_id`), it must have a
 `model`, it may not reference another agent, and the Output must consume it.
 
-## Step 3 — Test, then deploy
+## Step 3 — Test, publish, then deploy
 
-Run the draft to try it (note: on `execute`, `-f` means **--follow**, not a file):
+`create` makes the agent as **your own draft**. Nobody else sees it, and it cannot be
+deployed, until you publish it as a version. `compass agents update <agent-id> -f agent.yaml`
+replaces your draft.
+
+Run your draft to try it (note: on `execute`, `-f` means **--follow**, not a file):
 ```
 compass agents execute <agent-id> -m "Ticket: login page 500s for all users" -f
 ```
-Then deploy (deploy works on an agent's id):
+Publish it as the next version, then deploy that version (deploy works on an agent's id):
 ```
+compass agents publish <agent-id> -m "What the change is for" --json
 compass workflows deploy <agent-id> --json
 ```
 
@@ -84,6 +89,6 @@ compass workflows deploy <agent-id> --json
 
 - Ground uncertain flags with `compass agents --help` / `compass agents create --help`.
   Watch the `-f` collision: `create`/`update` → file; `execute` → follow.
-- Show the user the instructions, model, and tools, and confirm before creating/deploying.
-- Deploy and delete change real state — confirm intent first.
+- Show the user the instructions, model, and tools, and confirm before creating, publishing or deploying.
+- Publish, deploy and delete change what other people see or run — confirm intent first.
 - Never print or embed the API key.

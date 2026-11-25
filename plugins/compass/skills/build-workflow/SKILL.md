@@ -67,15 +67,19 @@ non-negotiables:
 
 Sketch the graph for the user in plain terms before writing YAML, then write it.
 
-## Step 3 — Create (or update) the workflow entity
+## Step 3 — Create the workflow, or change your draft of it
 
-**Editing an existing workflow** — `update -f` takes the raw definition text:
+Nobody edits a workflow in place. What you write is **your own draft**: nobody else sees it,
+and nothing that runs changes, until you publish it as the workflow's next version.
+
+**Editing an existing workflow** — `update -f` replaces your draft with the raw definition
+text, starting the draft from the latest version when you hold none:
 ```
 compass workflows update <workflow-id> -f definition.yaml --json
 ```
 
 **Creating a new workflow** — `create -f` takes the definition itself, which names the
-workflow:
+workflow, and makes it your first draft:
 ```
 compass workflows create -f definition.yaml --json
 ```
@@ -88,25 +92,33 @@ workflows create -f definition.yaml --json` (`compass owners list` shows the ids
 ```
 compass workflows validate <workflow-id> --json
 ```
-Map any error codes using the table in [reference/schema.md](reference/schema.md)
-(e.g. `MISSING_MODEL` → the connection has no model; `DUPLICATE_INPUT` → more than one
-input node). Edit `definition.yaml`, re-run `update -f`, re-validate. Loop until
-clean.
+This checks your draft. Map any error codes using the table in
+[reference/schema.md](reference/schema.md) (e.g. `MISSING_MODEL` → the connection has no
+model; `DUPLICATE_INPUT` → more than one input node). Edit `definition.yaml`, re-run
+`update -f`, re-validate. Loop until clean.
 
-## Step 5 — Deploy and run
-
-```
-compass workflows deploy <workflow-id> --json
-compass execute -d <deployment-id> -i topic="Q3 report" -f    # run the deployment
-```
-To test before deploying, execute the draft directly:
+To try the draft before publishing it, execute the workflow by id, which runs your draft:
 ```
 compass execute -w <workflow-id> -i topic="Q3 report" -f
 ```
 
+## Step 5 — Publish, deploy and run
+
+Publish turns your draft into the next version. Deploy makes the latest version live. A
+draft is never deployed.
+```
+compass workflows publish <workflow-id> -m "What the change is for" --json
+compass workflows deploy <workflow-id> --json
+compass execute -d <deployment-id> -i topic="Q3 report" -f    # run the deployment
+```
+Publishing is refused when someone published a newer version after your draft started.
+Read the latest (`compass workflows get <workflow-id> --json`), reapply your change to its
+definition, `update -f`, and publish again. `compass workflows versions <workflow-id>`
+lists the history, and `compass workflows discard <workflow-id>` throws your draft away.
+
 ## Rules
 
 - Ground uncertain flags with `compass workflows --help` / `<cmd> --help` before running.
-- Show the user the definition and confirm before creating/deploying anything.
-- Deploy and delete change real state — confirm intent first.
+- Show the user the definition and confirm before creating, publishing or deploying anything.
+- Publish, deploy and delete change what other people see or run — confirm intent first.
 - Never print or embed the API key.
