@@ -8,7 +8,7 @@ version: 1
 nodes:
   - id: input                        # exactly ONE input node; no inputs, no depends_on
     name: Input
-    type: input                      # mode defaults to chat -> downstream value is the
+    type: input                      # mode defaults to message -> downstream value is the
                                      # message string (use mode: object + fields for typed inputs)
 
   - id: agent                        # inline agent step (no agent_id)
