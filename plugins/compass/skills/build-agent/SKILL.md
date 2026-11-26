@@ -47,7 +47,7 @@ compass agents create \
 | `--instructions` | **The system prompt.** |
 | `--provider` | **Provider connection ID** — supplies the model. |
 | `--tool` | Repeatable. Format `agent:<ID>` \| `workflow:<ID>` \| `integration:<CONN_ID>`. |
-| `--conversation-history` / `--no-conversation-history` | Multi-turn memory (default off). |
+| `--chat-history` / `--no-chat-history` | Multi-turn memory (default off). |
 | `-f`, `--file` | A full agent **definition YAML** instead of flags (see Step 2b). |
 
 Capture the returned agent `id`.

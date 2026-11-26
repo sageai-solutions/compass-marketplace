@@ -36,7 +36,7 @@ the final word — map its error codes with the table at the bottom.
 | `input` | `mode`, `fields`. The entry point — exactly one. See **Input node** below. |
 | `output` | `mode`, `fields`. The exit point — exactly one. See **Output node** below. |
 | `component` | `component_type: str`, `config: dict`. The building blocks (prompt/document_parser/…). |
-| `agent` | `agent_id` (reference a prebuilt agent — then inline fields are ignored) **or** inline: `model`, `system_prompt`, `tools`, `settings`, `reasoning`, `conversation_history`, `response_format`, `batch_over`, `batch_concurrency`. See **Agent node** below. |
+| `agent` | `agent_id` (reference a prebuilt agent — then inline fields are ignored) **or** inline: `model`, `system_prompt`, `tools`, `settings`, `reasoning`, `chat_history`, `response_format`, `batch_over`, `batch_concurrency`. See **Agent node** below. |
 | `integration` | `integration_type: str`, `connection_id: str?`, `action: str`. Calls an external OpenAPI connector. |
 | `workflow` | `workflow_id: str?`. Runs another workflow as a sub-step. |
 
@@ -59,7 +59,7 @@ integration tool is.
 | `embeddings` | `embed` | Embed text. A bare-string input is chunked first; output is always a list. | `text_field`="text", `chunk_size`=1000, `chunk_overlap`=200, `split_on_headings`=true, `batch_size`=100, `batch_concurrency`=5. Input requires `input`, `model`. |
 
 ### Input node
-`mode: chat` (the default) takes a message and its attachments, and hands the message
+`mode: message` (the default) takes a message and its attachments, and hands the message
 string downstream. `mode: object` takes the declared `fields`:
 ```yaml
 - id: input
@@ -110,7 +110,7 @@ Each entry in `fields` (`{name, type: {type, json_schema?}}`) becomes a bindable
   system_prompt: "..."
   settings: { temperature: 0.7, top_p: 1.0, max_tokens: 1024 }   # optional, verbatim ModelSettings
   reasoning: null              # optional ReasoningEffort
-  conversation_history: false
+  chat_history: false
   response_format: null        # optional JSON Schema constraining the agent's output
   batch_over: ""               # "" off | "$" input is the list | "<field>" that field is the list
   batch_concurrency: 5

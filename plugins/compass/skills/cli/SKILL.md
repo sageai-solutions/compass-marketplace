@@ -3,7 +3,7 @@ name: cli
 description: >-
   Operate the Compass platform from the command line with the `compass` CLI:
   run and follow executions, list/inspect workflows, agents, executions,
-  connections, providers, owners, conversations, and approvals. Use when the
+  connections, providers, owners, chats, and approvals. Use when the
   user wants to run/execute a Compass workflow or agent, deploy or check
   something on Compass, tail an execution, list or inspect any Compass resource,
   approve/reject a human-in-the-loop request, or switch owner/profile.
@@ -100,7 +100,7 @@ Confirm subcommands and flags with `--help`; this is the map, not the contract:
 | `compass integrations` | Custom OpenAPI connectors: `list`, `get`, `register`, `delete`. |
 | `compass datasets` | Searchable document collections: `list`, `show`, `create` (`--ocr-connection`, `--chunk-size`, `--chunk-overlap` set its pipeline's settings), `upload` (one ingestion execution per file; `--wait` follows them), `documents`, `search`, `delete-document`, `delete`, and storage sources it keeps in sync with: `sources`, `add-source` (`--connection`, `--path`, `--schedule` cron), `sync`, `runs`. |
 | `compass owners` | `list`, `use <owner-id>` — who you can create things for (you, your teams, the organization) with your role in each, and which one new things land with. |
-| `compass conversations` | `list`, `get`, `create`, `runs`, `delete`. |
+| `compass chats` | `list`, `get`, `create`, `runs`, `delete`. |
 | `compass auth` / `compass config` | `login`/`logout`/`whoami`; `list`/`path`/`use <profile>`. |
 
 ## Common recipes
